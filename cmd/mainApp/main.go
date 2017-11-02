@@ -14,82 +14,13 @@ import (
 )
 
 
-type currencyMongoDB struct {
-	DatabaseURL string
-	DatabaseName string
-	CollectionName string
 
-}
 
-type Payload struct {
-	WebhookURL string `json:"webhookURL"`
-	BaseCurrency string `json:"baseCurrency"`
-	TargetCurrency string `json:"targetCurrency"`
-	MinTriggerValue float32 `json:"minTriggerValue"`
-	MaxTriggerValue float32 `json:"maxTriggerValue"`
-}
 
-func(db *currencyMongoDB) Init() {
-	session, err := mgo.Dial(db.DatabaseURL)
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
-}
 
-func(db *currencyMongoDB) Addcurrency(pay Payload) {
-	session, err := mgo.Dial(db.DatabaseURL)
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
-
-	err = session.DB(db.DatabaseName).C(db.CollectionName).Insert(bson.M{"baseCurrency": pay.BaseCurrency,
-	"targetCurrency":pay.TargetCurrency, "date": cu.Date})
-	if err != nil {
-		fmt.Printf("Something went wrong with adding data to mongoDB %v", err)
-	}
-
-}
 var cu Currency
 
-type Currency struct {
-	 Base string `json:"base"`
-	 Date string `json:"date"`
-	 Rates struct {
-	 	AUD float64 `json:"AUD"`
-	 	BGN float64 `json:"BGN"`
-	 	BRL float64 `json:"BRL"`
-	 	CAD float64 `json:"CAD"`
-	 	CHF float64 `json:"CHF"`
-	 	CNY float64 `json:"CNY"`
-	 	CZK float64 `json:"CZK"`
-	 	DKK float64 `json:"DKK"`
-	 	GBP float64 `json:"GBP"`
-	 	HKD float64 `json:"HKD"`
-	 	HRK float64 `json:"HRK"`
-	 	HUF float64 `json:"HUF"`
-	 	IDR float64 `json:"IDR"`
-	 	ILS float64 `json:"ILS"`
-	 	INR float64 `json:"INR"`
-	 	JPY float64 `json:"JPY"`
-	 	KRW float64 `json:"KRW"`
-	 	MXN float64 `json:"MXN"`
-	 	MYR float64 `json:"MYR"`
-	 	NOK float64 `json:"NOK"`
-	 	NZD float64 `json:"NZD"`
-	 	PHP float64 `json:"PHP"`
-	 	PLN float64 `json:"PLN"`
-	 	RON float64 `json:"RON"`
-	 	RUB float64 `json:"RUB"`
-	 	SEK float64 `json:"SEK"`
-	 	SGD float64 `json:"SGD"`
-	 	THB float64 `json:"THB"`
-	 	TRY float64 `json:"TRY"`
-	 	USD float64 `json:"USD"`
-	 	ZAR float64 `json:"ZAR"`
-	 	} `json:"rates"`
-}
+
 func getCurrency(URLCurrency string) error {
 
 	content, err := http.Get(URLCurrency)
